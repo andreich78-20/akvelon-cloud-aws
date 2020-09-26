@@ -1,8 +1,11 @@
 #!/bin/bash
 
-curl -sL https://rpm.nodesource.com/setup_14.x | sudo -E bash -
-sudo apt-get update && sudo apt-get install -y nodejs npm git
-git clone https://github.com/andreich78-20/akvelon-cloud-aws.git akvelon && \
-  cd akvelon/ec2/app && npm install && \
-  npm install -g pm2 && pm2 start index.js && \
-  pm2 startup systemd && pm2 save
+sudo -E bash -
+sudo yum update -y && sudo yum install -y git
+git clone https://github.com/andreich78-20/akvelon-cloud-aws.git akvelon-db && \
+  cd akvelon-db/ec2/app
+sudo wget https://dev.mysql.com/get/mysql57-community-release-el7-11.noarch.rpm
+sudo yum localinstall mysql57-community-release-el7-11.noarch.rpm 
+sudo yum install -y mysql-community-server
+sudo chkconfig mysqld on
+sudo service mysqld start
