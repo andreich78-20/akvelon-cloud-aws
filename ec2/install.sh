@@ -1,8 +1,10 @@
 #!/bin/bash
 
 sudo -E bash -
-sudo yum update -y && sudo yum install -y git
+sudo yum update -y && sudo yum install -y git httpd
 git clone https://github.com/andreich78-20/akvelon-cloud-aws.git akvelon-db
+sudo systemctl start httpd && \
+sudo systemctl enable httpd && \
 sudo wget https://dev.mysql.com/get/mysql57-community-release-el7-11.noarch.rpm && \
 sudo yum localinstall -y mysql57-community-release-el7-11.noarch.rpm && \
 sudo yum install -y mysql-community-server && \
