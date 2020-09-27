@@ -38,6 +38,14 @@ app.get('/long', (req, res) => {
   }, 5000);
 });
 
+app.get('/healthcheck', (req, res) => {
+  if (mysqlConnection.state == 'disconnected') {
+    res.status(500).send('No connection to the database!');
+    return;
+  }
+  res.send({ok: 1, pid: process.pid, connectionState: mysqlConnection.state});
+});
+
 const port = process.env.PORT ? parseInt(process.env.PORT, 10) : 8080;
 
 app.listen(port, () => {
