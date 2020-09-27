@@ -3,7 +3,7 @@ const express = require('express');
 const app = express();
 
 var mysqlConnection = mysql.createConnection({
-host: '18.237.56.171',
+host: '172.31.13.78',
 user: 'dbuser',
 password: 'akvelon#cLoudUser2020',
 database: 'cloud_test',
