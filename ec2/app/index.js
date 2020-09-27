@@ -17,35 +17,19 @@ else
   console.log('Connection failed!'+ JSON.stringify(err,undefined,2));
 });
 
-  mysqlConnection.query("CALL GetIncrementedVisitorsCounter;", [], (err, rows, fields) => {
-    if (!err) {
-      rows.forEach( (element) => {
-        if(element.constructor == Array)
-          console.log(element[0].IncrementedCounter);
-        else
-          console.log(element);
-      });
-    }
-    else {
-      console.log(err);
-    }
-  });
-
 app.get('/', (req, res) => {
-  mysqlConnection.query("CALL GetIncrementedVisitorsCounter;", [], (err, rows, fields) => {
-    if (!err)
-      rows.forEach( (element) => {
+  mysqlConnection.query("CALL GetIncrementedVisitorsCounter();", [], (err, rows, fields) => {
+    if (!err) {
+      var element = rows[0];
         if(element.constructor == Array)
-          res.send(element[0].IncrementedCounter);
+          res.send({ok: 1, pid: process.pid, counter: element[0].IncrementedCounter});
         else
-          res.send(element);
-      });
+          res.send({ok: 0, pid: process.pid, element: element});
+    }
     else {
-      res.status(500);
-      res.send(err);
+      res.status(500).send(err);
     }
   });
-  // res.send({ok: 1, pid: process.pid})
 });
 
 app.get('/long', (req, res) => {
