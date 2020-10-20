@@ -3,10 +3,10 @@ const express = require('express');
 const app = express();
 
 var mysqlConnection = mysql.createConnection({
-host: '172.31.13.78',
-user: 'dbuser',
-password: 'akvelon#cLoudUser2020',
-database: 'cloud_test',
+host: process.env.DB_ENDPOINT,
+user: process.env.DB_USER,
+password: process.env.DB_PASSWORD,
+database: process.env.DB_SCHEMA,
 multipleStatements: true
 });
 
