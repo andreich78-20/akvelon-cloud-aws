@@ -27,7 +27,7 @@ app.get('/', (req, res) => {
           res.send({ok: 0, pid: process.pid, element: element});
     }
     else {
-      res.status(500).send({err:err, db: process.env.DB_ENDPOINT);
+      res.status(500).send({err:err, db: process.env.DB_ENDPOINT});
     }
   });
 });
