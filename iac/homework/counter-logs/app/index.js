@@ -24,12 +24,8 @@ const cloudWatchLogs = new AWS.CloudWatchLogs({apiVersion: config.logs.apiVersio
 
 app.use(AWSXRay.express.openSegment('MyApp'));
 
-app.get('/', (req, res) => {
-  res.send({ok: 1});
-});
-
 const loggerMiddleware = async function(req, res, next){
-  var startedAt = new Date.now();
+  var startedAt = Date.now();
   next();
   const description = await cloudWatchLogs.describeLogStreams({
     logGroupName: config.logs.group,
@@ -53,7 +49,6 @@ const loggerMiddleware = async function(req, res, next){
 };
 
 
-app.use(AWSXRay.express.closeSegment());
 app.use(loggerMiddleware);
 
 app.get('/', (req, res) => {
@@ -62,7 +57,7 @@ app.get('/', (req, res) => {
       var element = rows[0];
       if(element.constructor == Array) {
         res.locals.counter = element[0].IncrementedCounter;
-        res.send({ok: 1, pid: process.pid, counter: counter});
+        res.send({ok: 1, pid: process.pid, counter: res.locals.counter});
       }
       else {
         res.send({ok: 0, pid: process.pid, element: element});
@@ -88,6 +83,7 @@ app.get('/healthcheck', (req, res) => {
   res.send({ok: 1, pid: process.pid, connectionState: mysqlConnection.state});
 });
 
+app.use(AWSXRay.express.closeSegment());
 
 const port = process.env.PORT ? parseInt(process.env.PORT, 10) : 8080;
 
